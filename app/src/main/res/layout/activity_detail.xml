@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        tools:context="tutorial.elmasry.moviestage2.DetailActivity">
+
+        <ImageView
+            android:id="@+id/detail_iv_poster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/content_description_poster"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/detail_label_title"
+            style="@style/MovieInfoLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_label_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_iv_poster" />
+
+        <TextView
+            android:id="@+id/detail_title"
+            style="@style/MovieInfoStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/detail_label_title"
+            app:layout_constraintTop_toBottomOf="@+id/detail_iv_poster"
+            tools:text="@string/test_detail_title" />
+
+        <TextView
+            android:id="@+id/detail_label_user_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MovieInfoLabelStyle"
+            android:text="@string/detail_label_user_rating"
+            app:layout_constraintStart_toStartOf="@+id/detail_label_title"
+            app:layout_constraintTop_toBottomOf="@+id/detail_label_title" />
+
+        <TextView
+            android:id="@+id/detail_user_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MovieInfoStyle"
+            tools:text="@string/test_detail_user_rating"
+            app:layout_constraintStart_toEndOf="@+id/detail_label_user_rating"
+            app:layout_constraintTop_toBottomOf="@+id/detail_title" />
+
+        <TextView
+            android:id="@+id/detail_label_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MovieInfoLabelStyle"
+            android:text="@string/detail_label_release_date"
+            app:layout_constraintStart_toStartOf="@+id/detail_label_user_rating"
+            app:layout_constraintTop_toBottomOf="@+id/detail_label_user_rating" />
+
+        <TextView
+            android:id="@+id/detail_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MovieInfoStyle"
+            tools:text="@string/test_detail_release_date"
+            app:layout_constraintStart_toEndOf="@+id/detail_label_release_date"
+            app:layout_constraintTop_toBottomOf="@+id/detail_user_rating" />
+
+        <TextView
+            android:id="@+id/detail_label_plot_synopsis"
+            style="@style/MovieInfoLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_label_plot_synopsis"
+            app:layout_constraintStart_toStartOf="@+id/detail_label_release_date"
+            app:layout_constraintTop_toBottomOf="@+id/detail_label_release_date" />
+
+        <TextView
+            android:id="@+id/detail_plot_synopsis"
+            style="@style/MovieInfoStyle"
+            android:layout_marginTop="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/detail_label_plot_synopsis"
+            app:layout_constraintTop_toBottomOf="@+id/detail_label_plot_synopsis"
+            tools:text="@string/test_detail_plot_synopsis" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
