@@ -8,16 +8,31 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="MovieInfoLabelStyle">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:layout_marginTop">16dp</item>
+
+    <style name="MovieInfoStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:layout_marginTop">8dp</item>
     </style>
 
-    <style name="MovieInfoStyle" parent="@style/MovieInfoLabelStyle">
-        <item name="android:textStyle">normal</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:layout_marginLeft">8dp</item>
+    <style name="horizontalRuleStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginStart">@dimen/detail_activity_padding</item>
+        <item name="android:layout_marginLeft">@dimen/detail_activity_padding</item>
+        <item name="android:layout_marginRight">@dimen/detail_activity_padding</item>
+        <item name="android:layout_marginEnd">@dimen/detail_activity_padding</item>
+        <item name="android:background">@color/detail_horizontal_rule</item>
+    </style>
+
+    <style name="trailerButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/detail_activity_padding</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Button</item>
+        <item name="android:background">@drawable/touch_selector</item>
     </style>
 
 </resources>

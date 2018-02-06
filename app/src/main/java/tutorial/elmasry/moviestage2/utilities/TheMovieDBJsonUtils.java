@@ -48,4 +48,19 @@ public class TheMovieDBJsonUtils {
         return movieInfoArray;
 
     }
+
+    public static int getMovieRunningTimeFromJson(String jsonResponseString) throws JSONException {
+
+        final String TMDB_RUNNING_TIME = "runtime";
+
+        return new JSONObject(jsonResponseString).getInt(TMDB_RUNNING_TIME);
+
+    }
+
+    public static String getMovieReviewsFromJson(String jsonResponseString) {
+
+        return null;
+
+    }
+    
 }

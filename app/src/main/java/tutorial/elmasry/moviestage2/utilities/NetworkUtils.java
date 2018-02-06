@@ -24,6 +24,10 @@ public final class NetworkUtils {
     public static final int SORT_POPULAR = 0;
     public static final int SORT_TOP_RATED = 1;
 
+    public static final int URL_FOR_MOVIE_EXTRA_INFO = 100;
+    public static final int URL_FOR_MOVIE_REVIEWS = 101;
+    public static final int URL_FOR_MOVIE_TRAILERS = 102;
+
     private static final String API_KEY_PARAM = "api_key";
 
 
@@ -46,6 +50,43 @@ public final class NetworkUtils {
                 throw new IllegalArgumentException("undefined sortBy argument, given: " + sortBy);
         }
 
+        return buildUrl(urlString);
+
+    }
+
+    /**
+     * @param movieId the movie Id as defined in the movie db api
+     * @param urlFor can be URL_FOR_MOVIE_EXTRA_INFO, URL_FOR_MOVIE_REVIEWS or URL_FOR_MOVIE_TRAILERS
+     * @return URL object will be used to make http request to get movie trailers or reviews or extra info
+     */
+    public static URL buildUrlWithId(int movieId, int urlFor) {
+
+        final String BASE_URL = "http://api.themoviedb.org/3/movie/" + movieId;
+
+        final String urlString;
+
+        switch (urlFor) {
+            case URL_FOR_MOVIE_EXTRA_INFO:
+                urlString = BASE_URL;
+                break;
+            case URL_FOR_MOVIE_REVIEWS:
+                urlString = Uri.parse(BASE_URL).buildUpon()
+                        .appendPath("reviews")
+                        .build().toString();
+                break;
+            case URL_FOR_MOVIE_TRAILERS:
+                urlString = Uri.parse(BASE_URL).buildUpon()
+                        .appendPath("videos")
+                        .build().toString();
+                break;
+            default:
+                throw new IllegalArgumentException("undefined urlFor argument, given: " + urlFor);
+        }
+
+        return buildUrl(urlString);
+    }
+
+    private static URL buildUrl(String urlString) {
         Uri uri = Uri.parse(urlString).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, BuildConfig.THE_MOVE_DB_API_KEY)
                 .build();
@@ -69,14 +110,10 @@ public final class NetworkUtils {
 
         try {
 
-
             InputStream in = urlConnection.getInputStream();
-
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
-
-
 
             if (scanner.hasNext()) {
                 return scanner.next();

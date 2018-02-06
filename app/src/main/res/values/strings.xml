@@ -4,23 +4,24 @@
 
     <string name="message_error_no_internet_connection">Please, connect your device to the internet to load data</string>
 
-    <string name="detail_label_title">Title: </string>
-    <string name="detail_label_plot_synopsis">Plot Synopsis: </string>
-    <string name="detail_label_user_rating">User Rating: </string>
-    <string name="detail_label_release_date">Release Date: </string>
+    <string name="detail_label_trailers">Trailers:</string>
+    <string name="detail_label_trailer1">Trailer 1</string>
+    <string name="detail_label_trailer2">Trailer 2</string>
+    <string name="detail_label_reviews">Reviews: </string>
 
     <string name="message_failing_to_get_movie_detail">Failing to get movie detail</string>
 
     <string name="action_popular_movies">Popular Movies</string>
     <string name="action_top_rated_movies">Top Rated Movies</string>
 
-    <string name="label_detail_activity">Detail Activity</string>
+    <string name="label_detail_activity">DetailActivity</string>
 
     <string name="content_description_poster">poster image</string>
 
     <string name="test_detail_title">Movie Title</string>
-    <string name="test_detail_user_rating">5.7</string>
+    <string name="test_detail_user_rating">5.7/10</string>
     <string name="test_detail_plot_synopsis">Overview about the movie</string>
-    <string name="test_detail_release_date">2001-10-31</string>
+    <string name="test_detail_release_date">2001</string>
+
 
 </resources>

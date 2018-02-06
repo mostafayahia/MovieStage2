@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by yahia on 1/29/18.
  */
 
-public class MovieInfo implements Parcelable {
+public final class MovieInfo implements Parcelable {
 
     private int id;
     private String originalTitle;
