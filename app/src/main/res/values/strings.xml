@@ -10,6 +10,7 @@
     <string name="detail_label_reviews">Reviews: </string>
 
     <string name="message_failing_to_get_movie_detail">Failing to get movie detail</string>
+    <string name="message_cannot_play_video">You must have a browser or app to watch videos on the internet</string>
 
     <string name="action_popular_movies">Popular Movies</string>
     <string name="action_top_rated_movies">Top Rated Movies</string>

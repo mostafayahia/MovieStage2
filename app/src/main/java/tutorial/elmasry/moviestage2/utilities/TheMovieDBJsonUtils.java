@@ -57,10 +57,52 @@ public class TheMovieDBJsonUtils {
 
     }
 
-    public static String getMovieReviewsFromJson(String jsonResponseString) {
+    public static String getMovieReviewsInHtmlFromJson(String jsonResponseString) throws JSONException {
 
-        return null;
+        final String TMDB_RESULTS = "results";
+        final String TMDB_REIVEWER = "author";
+        final String TMDB_REVIEW_CONTENT = "content";
 
+        String allReivews = "";
+
+        JSONArray jsonResultsArray = new JSONObject(jsonResponseString).getJSONArray(TMDB_RESULTS);
+
+        for (int i = 0; i < jsonResultsArray.length(); i++) {
+            JSONObject jsonReview = (JSONObject) jsonResultsArray.get(i);
+            String reviewer = jsonReview.getString(TMDB_REIVEWER);
+            String reviewContent = jsonReview.getString(TMDB_REVIEW_CONTENT);
+            allReivews = allReivews.concat("<br><b>" + reviewer + ":</b><br><br>")
+                    .concat(reviewContent)
+                    .concat("<br><br><b>======================================</b><br>");
+        }
+
+        return allReivews.replace("\r\n", "<br>");
     }
-    
+
+    /**
+     * @param jsonResponseString
+     * @return null if there is no trailers for this movie
+     * @throws JSONException
+     */
+    public static String[] getMovieTrailerUrlArrayFromJson(String jsonResponseString) throws JSONException {
+
+        final String TMDB_RESULTS = "results";
+        final String TMDB_VIDEO_KEY = "key";
+
+        JSONArray jsonResultsArray = new JSONObject(jsonResponseString).getJSONArray(TMDB_RESULTS);
+
+        final int TRAILERS_NUM = jsonResultsArray.length();
+
+        if (TRAILERS_NUM == 0) return null;
+
+        String[] movieTrailerUrlArray = new String[TRAILERS_NUM];
+
+        for (int i = 0; i < TRAILERS_NUM; i++) {
+            String videoKey = ((JSONObject) jsonResultsArray.get(i)).getString(TMDB_VIDEO_KEY);
+            movieTrailerUrlArray[i] = "https://www.youtube.com/watch?v=" + videoKey;
+        }
+
+        return movieTrailerUrlArray;
+    }
+
 }

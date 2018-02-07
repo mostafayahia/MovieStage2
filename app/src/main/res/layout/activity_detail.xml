@@ -71,7 +71,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="@+id/detail_user_rating"
             app:layout_constraintTop_toBottomOf="@+id/detail_user_rating"
-            app:srcCompat="@drawable/ic_favourite" />
+            app:srcCompat="@drawable/ic_movie_not_in_favourites" />
 
         <TextView
             android:id="@+id/detail_plot_synopsis"
@@ -95,6 +95,7 @@
             android:paddingLeft="@dimen/detail_activity_padding"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:text="@string/detail_label_trailers"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_horizontal_rule_after_synopsis" />
 
@@ -102,12 +103,15 @@
             android:id="@+id/detail_button_trailer1"
             style="@style/trailerButtonStyle"
             android:text="@string/detail_label_trailer1"
+            android:visibility="gone"
+            android:onClick="handleTrailerButtonClick"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_label_trailers" />
 
         <View
             android:id="@+id/detail_horizontal_rule_after_trailer1"
             style="@style/horizontalRuleStyle"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer1" />
 
@@ -115,12 +119,15 @@
             android:id="@+id/detail_button_trailer2"
             style="@style/trailerButtonStyle"
             android:text="@string/detail_label_trailer2"
+            android:visibility="gone"
+            android:onClick="handleTrailerButtonClick"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer1" />
 
         <View
             android:id="@+id/detail_horizontal_rule_after_trailer2"
             style="@style/horizontalRuleStyle"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer2" />
 
@@ -131,6 +138,7 @@
             android:layout_marginLeft="@dimen/detail_activity_padding"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:text="@string/detail_label_reviews"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer2" />
 
@@ -141,7 +149,8 @@
             android:layout_marginStart="@dimen/detail_activity_padding"
             android:layout_marginLeft="@dimen/detail_activity_padding"
             android:layout_marginTop="8dp"
-            tools:text="Some reviews here..."
+            tools:text="Some reviewsInHtml here..."
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_label_reviews" />
 

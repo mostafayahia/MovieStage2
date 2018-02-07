@@ -9,9 +9,10 @@ import android.os.Parcelable;
 
 public final class ExtraMovieInfo implements Parcelable {
 
+    private int movieId;
     private String trailer1Url;
     private String trailer2Url;
-    private String reviews;
+    private String reviewsInHtml;
     private int runningTime;
 
     public static final Creator<ExtraMovieInfo> CREATOR = new Creator<ExtraMovieInfo>() {
@@ -31,9 +32,10 @@ public final class ExtraMovieInfo implements Parcelable {
     }
 
     private ExtraMovieInfo(Parcel in) {
+        movieId = in.readInt();
         trailer1Url = in.readString();
         trailer2Url = in.readString();
-        reviews = in.readString();
+        reviewsInHtml = in.readString();
         runningTime = in.readInt();
     }
 
@@ -44,10 +46,19 @@ public final class ExtraMovieInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(movieId);
         dest.writeString(trailer1Url);
         dest.writeString(trailer2Url);
-        dest.writeString(reviews);
+        dest.writeString(reviewsInHtml);
         dest.writeInt(runningTime);
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 
     public String getTrailer2Url() {
@@ -58,12 +69,12 @@ public final class ExtraMovieInfo implements Parcelable {
         this.trailer2Url = trailer2Url;
     }
 
-    public String getReviews() {
-        return reviews;
+    public String getReviewsInHtml() {
+        return reviewsInHtml;
     }
 
-    public void setReviews(String reviews) {
-        this.reviews = reviews;
+    public void setReviewsInHtml(String reviewsInHtml) {
+        this.reviewsInHtml = reviewsInHtml;
     }
 
     public int getRunningTime() {
