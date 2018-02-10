@@ -25,6 +25,12 @@
             android:name="tutorial.elmasry.moviestage2.DetailActivity"
             android:label="@string/label_detail_activity"
             android:parentActivityName="tutorial.elmasry.moviestage2.MainActivity"></activity>
+
+        <provider
+            android:authorities="tutorial.elmasry.moviestage2"
+            android:name=".data.FavouriteMovieContentProvider"
+            android:exported="false" />
+
     </application>
 
 </manifest>

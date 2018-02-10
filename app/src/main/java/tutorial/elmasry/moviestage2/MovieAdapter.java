@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import tutorial.elmasry.moviestage2.model.MovieInfo;
+import tutorial.elmasry.moviestage2.model.BasicMovieInfo;
 
 /**
  * Created by yahia on 1/30/18.
@@ -17,12 +17,12 @@ import tutorial.elmasry.moviestage2.model.MovieInfo;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
-    private MovieInfo[] mMovieInfoArray;
+    private BasicMovieInfo[] mBasicMovieInfoArray;
     private final Context mContext;
     private final MovieAdapterOnClickHandler mClickHandler;
 
     public interface MovieAdapterOnClickHandler {
-        void clickHandler(MovieInfo movieInfo);
+        void clickHandler(BasicMovieInfo basicMovieInfo);
     }
 
     public MovieAdapter(Context context, MovieAdapterOnClickHandler clickHandler) {
@@ -40,7 +40,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
 
-        String posterUrl = mMovieInfoArray[position].getPosterUrl();
+        String posterUrl = mBasicMovieInfoArray[position].getPosterUrl();
 
         if (posterUrl == null || posterUrl.length() == 0)
             throw new RuntimeException("poster url can't be null or empty");
@@ -52,8 +52,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public int getItemCount() {
-        if (mMovieInfoArray == null) return 0;
-        else                         return mMovieInfoArray.length;
+        if (mBasicMovieInfoArray == null) return 0;
+        else                         return mBasicMovieInfoArray.length;
     }
 
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -68,12 +68,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         @Override
         public void onClick(View v) {
-            mClickHandler.clickHandler(mMovieInfoArray[getAdapterPosition()]);
+            mClickHandler.clickHandler(mBasicMovieInfoArray[getAdapterPosition()]);
         }
     }
 
-    public void setMovieInfoArray(MovieInfo[] mMovieInfoArray) {
-        this.mMovieInfoArray = mMovieInfoArray;
+    public void setBasicMovieInfoArray(BasicMovieInfo[] mBasicMovieInfoArray) {
+        this.mBasicMovieInfoArray = mBasicMovieInfoArray;
         notifyDataSetChanged();
     }
 }

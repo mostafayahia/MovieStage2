@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by yahia on 1/29/18.
  */
 
-public final class MovieInfo implements Parcelable {
+public final class BasicMovieInfo implements Parcelable {
 
     private int id;
     private String originalTitle;
@@ -17,7 +17,7 @@ public final class MovieInfo implements Parcelable {
     private String releaseDate;
 
 
-    public MovieInfo() {
+    public BasicMovieInfo() {
 
     }
 
@@ -69,7 +69,7 @@ public final class MovieInfo implements Parcelable {
         this.id = id;
     }
 
-    private MovieInfo(Parcel parcel) {
+    private BasicMovieInfo(Parcel parcel) {
 
         this.id = parcel.readInt();
         this.originalTitle = parcel.readString();
@@ -98,15 +98,15 @@ public final class MovieInfo implements Parcelable {
 
     }
 
-    public static final Parcelable.Creator CREATOR = new Creator<MovieInfo>() {
+    public static final Parcelable.Creator CREATOR = new Creator<BasicMovieInfo>() {
         @Override
-        public MovieInfo createFromParcel(Parcel source) {
-            return new MovieInfo(source);
+        public BasicMovieInfo createFromParcel(Parcel source) {
+            return new BasicMovieInfo(source);
         }
 
         @Override
-        public MovieInfo[] newArray(int size) {
-            return new MovieInfo[0];
+        public BasicMovieInfo[] newArray(int size) {
+            return new BasicMovieInfo[0];
         }
     };
 }

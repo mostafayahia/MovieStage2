@@ -1,16 +1,16 @@
 package tutorial.elmasry.moviestage2;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,44 +19,54 @@ import org.json.JSONException;
 import java.io.IOException;
 
 import tutorial.elmasry.moviestage2.model.ExtraMovieInfo;
-import tutorial.elmasry.moviestage2.model.MovieInfo;
+import tutorial.elmasry.moviestage2.model.BasicMovieInfo;
 import tutorial.elmasry.moviestage2.utilities.HelperUtils;
 import tutorial.elmasry.moviestage2.utilities.NetworkUtils;
 import tutorial.elmasry.moviestage2.utilities.TheMovieDBJsonUtils;
+import tutorial.elmasry.moviestage2.data.FavouriteMovieContract.FavouriteMovieEntry;
 
 public class DetailActivity extends AppCompatActivity {
 
-    public static final String EXTRA_MOVIE_INFO = "movie-info";
+    public static final String INTENT_EXTRA_MOVIE_INFO_BASIC = "movie-info-basic";
+
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
+
     private ExtraMovieInfo mExtraMovieInfo;
+    private BasicMovieInfo mBasicMovieInfo;
+
+    private static final String EXTRA_MOVIE_INFO_KEY = "extra-movie-info";
+    private static final String IN_FAVOURITES_KEY = "in-favourites";
+
+    private boolean mInFavourites;
+    private ImageView mFavouriteIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Intent intent = getIntent();
-        MovieInfo movieInfo = null;
-        if (intent != null) {
-            movieInfo = intent.getExtras().getParcelable(EXTRA_MOVIE_INFO);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mBasicMovieInfo = extras.getParcelable(INTENT_EXTRA_MOVIE_INFO_BASIC);
         }
 
-        if (intent == null || movieInfo == null) {
-            showErrorToast(R.string.message_failing_to_get_movie_detail);
+        if (extras == null || mBasicMovieInfo == null) {
+            HelperUtils.showToast(this, R.string.message_failing_to_get_movie_detail);
             return;
         }
 
         // extract year from release date, recall release date in format yyyy-mm-dd
-        String releaseYear = movieInfo.getReleaseDate().trim().substring(0, 4);
+        String releaseYear = mBasicMovieInfo.getReleaseDate().trim().substring(0, 4);
 
-        ((TextView) findViewById(R.id.detail_title)).setText(movieInfo.getOriginalTitle());
+        ((TextView) findViewById(R.id.detail_title)).setText(mBasicMovieInfo.getOriginalTitle());
         ((TextView) findViewById(R.id.detail_release_date)).setText(releaseYear);
-        ((TextView) findViewById(R.id.detail_user_rating)).setText(movieInfo.getUserRating() + "/10");
-        ((TextView) findViewById(R.id.detail_plot_synopsis)).setText(movieInfo.getPlotSynopsis());
+        ((TextView) findViewById(R.id.detail_user_rating))
+                .setText(getString(R.string.detail_format_user_rating, mBasicMovieInfo.getUserRating()));
+        ((TextView) findViewById(R.id.detail_plot_synopsis)).setText(mBasicMovieInfo.getPlotSynopsis());
 
         ImageView posterView = findViewById(R.id.detail_iv_poster);
 
-        String posterUrl = movieInfo.getPosterUrl();
+        String posterUrl = mBasicMovieInfo.getPosterUrl();
 
         if (posterUrl == null || posterUrl.length() == 0)
             throw new RuntimeException("poster url can't be null or empty");
@@ -65,11 +75,41 @@ public class DetailActivity extends AppCompatActivity {
                 .load(posterUrl)
                 .into(posterView);
 
-        new FetchExtraMovieInfo().execute(movieInfo.getId());
+        mFavouriteIcon = findViewById(R.id.detail_ic_favourite);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(EXTRA_MOVIE_INFO_KEY))
+                mExtraMovieInfo = savedInstanceState.getParcelable(EXTRA_MOVIE_INFO_KEY);
+            if (savedInstanceState.containsKey(IN_FAVOURITES_KEY))
+                mInFavourites = savedInstanceState.getBoolean(IN_FAVOURITES_KEY);
+            populateUIWithExtraInfo();
+        } else {
+            if (isMovieInFavourites()) {
+                mInFavourites = true;
+                getExtraMovieInfoFromDb();
+                populateUIWithExtraInfo();
+            } else {
+                new FetchExtraMovieInfo().execute(mBasicMovieInfo.getId());
+            }
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        if (mExtraMovieInfo != null)
+            outState.putParcelable(EXTRA_MOVIE_INFO_KEY, mExtraMovieInfo);
+
+        outState.putBoolean(IN_FAVOURITES_KEY, mInFavourites);
+
+        super.onSaveInstanceState(outState);
 
     }
 
     private void populateUIWithExtraInfo() {
+
+        Log.d(LOG_TAG, "movie id: " + mExtraMovieInfo.getMovieId());
 
         ((TextView) findViewById(R.id.detail_running_time)).setText(mExtraMovieInfo.getRunningTime() + "min");
 
@@ -94,25 +134,112 @@ public class DetailActivity extends AppCompatActivity {
             reviewsTv.setVisibility(View.VISIBLE);
             reviewsTv.setText(HelperUtils.fromHtml(reviewsInHtml));
         }
+
+        if (mInFavourites) {
+            mFavouriteIcon.setImageResource(R.drawable.ic_movie_in_favourites);
+        }
+        mFavouriteIcon.setVisibility(View.VISIBLE);
+
     }
 
     public void handleTrailerButtonClick(View view) {
+
         switch (view.getId()) {
             case R.id.detail_button_trailer1:
                 Intent trailer1Intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mExtraMovieInfo.getTrailer1Url()));
                 if (trailer1Intent.resolveActivity(getPackageManager()) != null)
                     startActivity(trailer1Intent);
                 else
-                    showErrorToast(R.string.message_cannot_play_video);
+                    HelperUtils.showToast(this, R.string.message_cannot_play_video);
                 break;
             case R.id.detail_button_trailer2:
                 Intent trailer2Intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mExtraMovieInfo.getTrailer2Url()));
                 if (trailer2Intent.resolveActivity(getPackageManager()) != null)
                     startActivity(trailer2Intent);
                 else
-                    showErrorToast(R.string.message_cannot_play_video);
+                    HelperUtils.showToast(this, R.string.message_cannot_play_video);
         }
 
+    }
+
+    public void handleFavouriteButtonClick(View view) {
+
+        if (mInFavourites) {
+            deleteMovieFromDb();
+            mInFavourites = false;
+            mFavouriteIcon.setImageResource(R.drawable.ic_movie_not_in_favourites);
+        } else {
+            insertMovieInDb();
+            mInFavourites = true;
+            mFavouriteIcon.setImageResource(R.drawable.ic_movie_in_favourites);
+        }
+
+    }
+
+    private boolean isMovieInFavourites() {
+
+        Cursor cursor =
+                getContentResolver().query(
+                        Uri.withAppendedPath(FavouriteMovieEntry.CONTENT_URI, mBasicMovieInfo.getId() + ""),
+                        new String[]{"_id"}, null, null, null);
+
+        return cursor != null && cursor.getCount() == 1;
+    }
+
+    private void getExtraMovieInfoFromDb() {
+
+        final String[] PROJECTION = {
+                FavouriteMovieEntry.COLUMN_RUNNING_TIME,
+                FavouriteMovieEntry.COLUMN_TRAILER1_URL,
+                FavouriteMovieEntry.COLUMN_TRAILER2_URL,
+                FavouriteMovieEntry.COLUMN_REVIEWS_IN_HTML
+        };
+
+        final int INDEX_RUNNING_TIME = 0;
+        final int INDEX_TRAILER1_URL = 1;
+        final int INDEX_TRAILER2_URL = 2;
+        final int INDEX_REVIEWS_IN_HTML = 3;
+
+        Cursor cursor = getContentResolver().query(
+                Uri.withAppendedPath(FavouriteMovieEntry.CONTENT_URI, mBasicMovieInfo.getId() + ""),
+                PROJECTION, null, null, null);
+
+        if (cursor != null && cursor.getCount() == 1) {
+            cursor.moveToNext();
+            mExtraMovieInfo = new ExtraMovieInfo();
+            mExtraMovieInfo.setMovieId(mBasicMovieInfo.getId());
+            mExtraMovieInfo.setRunningTime(cursor.getInt(INDEX_RUNNING_TIME));
+            mExtraMovieInfo.setTrailer1Url(cursor.getString(INDEX_TRAILER1_URL));
+            mExtraMovieInfo.setTrailer2Url(cursor.getString(INDEX_TRAILER2_URL));
+            mExtraMovieInfo.setReviewsInHtml(cursor.getString(INDEX_REVIEWS_IN_HTML));
+        }
+    }
+
+    private void insertMovieInDb() {
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(FavouriteMovieEntry._ID, mBasicMovieInfo.getId());
+        contentValues.put(FavouriteMovieEntry.COLUMN_TITLE, mBasicMovieInfo.getOriginalTitle());
+        contentValues.put(FavouriteMovieEntry.COLUMN_POSTER_URL, mBasicMovieInfo.getPosterUrl());
+        contentValues.put(FavouriteMovieEntry.COLUMN_RELEASE_DATE, mBasicMovieInfo.getReleaseDate());
+        contentValues.put(FavouriteMovieEntry.COLUMN_USER_RATING, mBasicMovieInfo.getUserRating());
+        contentValues.put(FavouriteMovieEntry.COLUMN_PLOT_SYNOPSIS, mBasicMovieInfo.getPlotSynopsis());
+
+        contentValues.put(FavouriteMovieEntry.COLUMN_RUNNING_TIME, mExtraMovieInfo.getRunningTime());
+        contentValues.put(FavouriteMovieEntry.COLUMN_TRAILER1_URL, mExtraMovieInfo.getTrailer1Url());
+        contentValues.put(FavouriteMovieEntry.COLUMN_TRAILER2_URL, mExtraMovieInfo.getTrailer2Url());
+        contentValues.put(FavouriteMovieEntry.COLUMN_REVIEWS_IN_HTML, mExtraMovieInfo.getReviewsInHtml());
+
+        getContentResolver().insert(FavouriteMovieEntry.CONTENT_URI, contentValues);
+    }
+
+    private void deleteMovieFromDb() {
+
+        getContentResolver().delete(
+                Uri.withAppendedPath(FavouriteMovieEntry.CONTENT_URI, mBasicMovieInfo.getId() + ""),
+                null, null
+        );
     }
 
     private class FetchExtraMovieInfo extends AsyncTask<Integer, Void, String[]> {
@@ -187,8 +314,6 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void showErrorToast(int stringResId) {
-        Toast.makeText(this, stringResId, Toast.LENGTH_SHORT).show();
-    }
+
 
 }

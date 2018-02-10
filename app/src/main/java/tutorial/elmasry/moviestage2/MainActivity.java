@@ -1,6 +1,7 @@
 package tutorial.elmasry.moviestage2;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,10 +18,11 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import tutorial.elmasry.moviestage2.model.MovieInfo;
+import tutorial.elmasry.moviestage2.model.BasicMovieInfo;
 import tutorial.elmasry.moviestage2.utilities.HelperUtils;
 import tutorial.elmasry.moviestage2.utilities.NetworkUtils;
 import tutorial.elmasry.moviestage2.utilities.TheMovieDBJsonUtils;
+import tutorial.elmasry.moviestage2.data.FavouriteMovieContract.FavouriteMovieEntry;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
@@ -28,11 +30,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final String MOVIE_INFO_ARRAY_KEY = "movie-info-array";
 
-    private MovieInfo[] mMovieInfoArray;
+    private BasicMovieInfo[] mBasicMovieInfoArray;
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mLoadingIndicator;
     private TextView mErrorNoConnectionTv;
+
+    private boolean mFavouritesDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setAdapter(mMovieAdapter);
 
         if (null != savedInstanceState && savedInstanceState.containsKey(MOVIE_INFO_ARRAY_KEY)) {
-            mMovieInfoArray = (MovieInfo[]) savedInstanceState.getParcelableArray(MOVIE_INFO_ARRAY_KEY);
-            mMovieAdapter.setMovieInfoArray(mMovieInfoArray);
+            mBasicMovieInfoArray = (BasicMovieInfo[]) savedInstanceState.getParcelableArray(MOVIE_INFO_ARRAY_KEY);
+            mMovieAdapter.setBasicMovieInfoArray(mBasicMovieInfoArray);
         } else {
             loadMoviesData(NetworkUtils.SORT_POPULAR);
         }
@@ -75,15 +79,25 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onSaveInstanceState(Bundle outState) {
 
         super.onSaveInstanceState(outState);
-        if (mMovieInfoArray != null)
-            outState.putParcelableArray(MOVIE_INFO_ARRAY_KEY, mMovieInfoArray);
+        if (mBasicMovieInfoArray != null)
+            outState.putParcelableArray(MOVIE_INFO_ARRAY_KEY, mBasicMovieInfoArray);
 
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        if (mFavouritesDisplay)
+            loadFavouriteMoviesDataFromDb();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int itemId = item.getItemId();
+        mFavouritesDisplay = false;
 
         switch (itemId) {
             case R.id.action_popular_movies:
@@ -92,8 +106,61 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             case R.id.action_top_rated_movies:
                 loadMoviesData(NetworkUtils.SORT_TOP_RATED);
                 return true;
+            case R.id.action_favourites:
+                loadFavouriteMoviesDataFromDb();
+                mFavouritesDisplay = true;
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void loadFavouriteMoviesDataFromDb() {
+
+        hideErrorNoConnectionView();
+
+        // getting from any movies' posters if exist
+        mMovieAdapter.setBasicMovieInfoArray(null);
+
+        final String[] PROJECTION = {
+                FavouriteMovieEntry._ID,
+                FavouriteMovieEntry.COLUMN_TITLE,
+                FavouriteMovieEntry.COLUMN_POSTER_URL,
+                FavouriteMovieEntry.COLUMN_RELEASE_DATE,
+                FavouriteMovieEntry.COLUMN_USER_RATING,
+                FavouriteMovieEntry.COLUMN_PLOT_SYNOPSIS
+        };
+
+        final int INDEX_ID = 0;
+        final int INDEX_TITLE = 1;
+        final int INDEX_POSTER_URL = 2;
+        final int INDEX_RELEASE_DATE = 3;
+        final int INDEX_USER_RATING = 4;
+        final int INDEX_PLOT_SYNOPSIS = 5;
+
+        Cursor cursor = getContentResolver().query(
+                FavouriteMovieEntry.CONTENT_URI,
+                PROJECTION, null, null, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+
+            BasicMovieInfo[] basicMovieInfoArray = new BasicMovieInfo[cursor.getCount()];
+
+            while (cursor.moveToNext()) {
+
+                BasicMovieInfo basicMovieInfo = new BasicMovieInfo();
+                basicMovieInfo.setId(cursor.getInt(INDEX_ID));
+                basicMovieInfo.setOriginalTitle(cursor.getString(INDEX_TITLE));
+                basicMovieInfo.setPosterUrl(cursor.getString(INDEX_POSTER_URL));
+                basicMovieInfo.setReleaseDate(cursor.getString(INDEX_RELEASE_DATE));
+                basicMovieInfo.setUserRating(cursor.getDouble(INDEX_USER_RATING));
+                basicMovieInfo.setPlotSynopsis(cursor.getString(INDEX_PLOT_SYNOPSIS));
+
+                basicMovieInfoArray[cursor.getPosition()] = basicMovieInfo;
+            }
+
+            mBasicMovieInfoArray = basicMovieInfoArray;
+            mMovieAdapter.setBasicMovieInfoArray(mBasicMovieInfoArray);
         }
     }
 
@@ -102,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (HelperUtils.isDeviceOnline(this)) {
             hideErrorNoConnectionView();
             // getting rid of old grid view if exist
-            mMovieAdapter.setMovieInfoArray(null);
+            mMovieAdapter.setBasicMovieInfoArray(null);
             new FetchMovieInfo().execute(sortBy);
         } else {
             showErrorNoConnectionView();
@@ -111,10 +178,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void clickHandler(MovieInfo movieInfo) {
+    public void clickHandler(BasicMovieInfo basicMovieInfo) {
 
         Intent detailIntent = new Intent(this, DetailActivity.class);
-        detailIntent.putExtra(DetailActivity.EXTRA_MOVIE_INFO, movieInfo);
+        detailIntent.putExtra(DetailActivity.INTENT_EXTRA_MOVIE_INFO_BASIC, basicMovieInfo);
         startActivity(detailIntent);
 
     }
@@ -155,8 +222,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             if (null == jsonResponse) return;
 
             try {
-                mMovieInfoArray = TheMovieDBJsonUtils.getMovieInfoArrayFromJson(jsonResponse);
-                mMovieAdapter.setMovieInfoArray(mMovieInfoArray);
+                mBasicMovieInfoArray = TheMovieDBJsonUtils.getMovieInfoArrayFromJson(jsonResponse);
+                mMovieAdapter.setBasicMovieInfoArray(mBasicMovieInfoArray);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "error in getting movie info array from json response");
                 e.printStackTrace();

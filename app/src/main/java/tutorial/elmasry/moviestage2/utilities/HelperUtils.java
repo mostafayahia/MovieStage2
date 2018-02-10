@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.Html;
 import android.text.Spanned;
+import android.widget.Toast;
 
 /**
  * Created by yahia on 1/30/18.
@@ -27,5 +28,13 @@ public class HelperUtils {
             result = Html.fromHtml(html);
         }
         return result;
+    }
+
+    public static void showToast(Context context, int stringResId) {
+        showToast(context, context.getString(stringResId));
+    }
+
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }

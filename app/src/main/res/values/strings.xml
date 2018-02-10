@@ -7,22 +7,20 @@
     <string name="detail_label_trailers">Trailers:</string>
     <string name="detail_label_trailer1">Trailer 1</string>
     <string name="detail_label_trailer2">Trailer 2</string>
-    <string name="detail_label_reviews">Reviews: </string>
+    <string name="detail_label_reviews">Reviews:</string>
 
     <string name="message_failing_to_get_movie_detail">Failing to get movie detail</string>
     <string name="message_cannot_play_video">You must have a browser or app to watch videos on the internet</string>
 
-    <string name="action_popular_movies">Popular Movies</string>
-    <string name="action_top_rated_movies">Top Rated Movies</string>
+    <string name="action_popular_movies">Popular</string>
+    <string name="action_top_rated_movies">Top Rated</string>
+    <string name="action_favourites">Favourites</string>
 
     <string name="label_detail_activity">DetailActivity</string>
 
     <string name="content_description_poster">poster image</string>
+    <string name="content_description_favourite_ic">Favourite Icon</string>
 
-    <string name="test_detail_title">Movie Title</string>
-    <string name="test_detail_user_rating">5.7/10</string>
-    <string name="test_detail_plot_synopsis">Overview about the movie</string>
-    <string name="test_detail_release_date">2001</string>
-
+    <string name="detail_format_user_rating">%1$.01f/10</string>
 
 </resources>

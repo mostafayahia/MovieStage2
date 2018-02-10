@@ -21,7 +21,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/test_detail_title" />
+            tools:text="Movie Title" />
 
         <ImageView
             android:id="@+id/detail_iv_poster"
@@ -45,7 +45,7 @@
             android:layout_marginLeft="@dimen/detail_space_between_poster_and_movie_info"
             app:layout_constraintStart_toEndOf="@+id/detail_iv_poster"
             app:layout_constraintTop_toTopOf="@+id/detail_iv_poster"
-            tools:text="@string/test_detail_release_date" />
+            tools:text="2001" />
 
         <TextView
             android:id="@+id/detail_running_time"
@@ -62,15 +62,18 @@
             app:layout_constraintStart_toStartOf="@+id/detail_running_time"
             app:layout_constraintTop_toBottomOf="@+id/detail_running_time"
             android:textColor="@android:color/black"
-            tools:text="@string/test_detail_user_rating" />
+            tools:text="5.7/10" />
 
         <ImageView
-            android:id="@+id/ic_favourite"
+            android:id="@+id/detail_ic_favourite"
             android:layout_width="@dimen/detail_ic_favourite_size"
             android:layout_height="@dimen/detail_ic_favourite_size"
             android:layout_marginTop="16dp"
+            android:onClick="handleFavouriteButtonClick"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/detail_user_rating"
             app:layout_constraintTop_toBottomOf="@+id/detail_user_rating"
+            android:contentDescription="@string/content_description_favourite_ic"
             app:srcCompat="@drawable/ic_movie_not_in_favourites" />
 
         <TextView
@@ -80,7 +83,7 @@
             android:padding="@dimen/detail_activity_padding"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_iv_poster"
-            tools:text="@string/test_detail_plot_synopsis" />
+            tools:text="Overview about the movie" />
 
         <View
             android:id="@+id/detail_horizontal_rule_after_synopsis"
@@ -146,8 +149,10 @@
             android:id="@+id/detail_reviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/detail_activity_padding"
-            android:layout_marginLeft="@dimen/detail_activity_padding"
+            android:paddingStart="@dimen/detail_activity_padding"
+            android:paddingLeft="@dimen/detail_activity_padding"
+            android:paddingEnd="@dimen/detail_activity_padding"
+            android:paddingRight="@dimen/detail_activity_padding"
             android:layout_marginTop="8dp"
             tools:text="Some reviewsInHtml here..."
             android:visibility="gone"

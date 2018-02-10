@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tutorial.elmasry.moviestage2.model.MovieInfo;
+import tutorial.elmasry.moviestage2.model.BasicMovieInfo;
 
 /**
  * Created by yahia on 1/29/18.
@@ -14,7 +14,7 @@ public class TheMovieDBJsonUtils {
 
 
 
-    public static MovieInfo[] getMovieInfoArrayFromJson(String jsonResponseString) throws JSONException {
+    public static BasicMovieInfo[] getMovieInfoArrayFromJson(String jsonResponseString) throws JSONException {
 
         final String TMDB_RESULTS = "results";
         final String TMDB_ORIGINAL_TITLE = "original_title";
@@ -27,25 +27,25 @@ public class TheMovieDBJsonUtils {
 
         JSONArray resultsJsonArray = new JSONObject(jsonResponseString).getJSONArray(TMDB_RESULTS);
 
-        MovieInfo[] movieInfoArray = new MovieInfo[resultsJsonArray.length()];
+        BasicMovieInfo[] basicMovieInfoArray = new BasicMovieInfo[resultsJsonArray.length()];
 
         for (int i = 0; i < resultsJsonArray.length(); i++) {
 
-            MovieInfo movieInfo = new MovieInfo();
+            BasicMovieInfo basicMovieInfo = new BasicMovieInfo();
 
             JSONObject movieInfoJson = (JSONObject) resultsJsonArray.get(i);
 
-            movieInfo.setId(movieInfoJson.getInt(TMDB_ID));
-            movieInfo.setOriginalTitle(movieInfoJson.getString(TMDB_ORIGINAL_TITLE));
-            movieInfo.setPlotSynopsis(movieInfoJson.getString(TMDB_PLOT_SYNOPSIS));
-            movieInfo.setPosterUrl("http://image.tmdb.org/t/p/w185"+movieInfoJson.getString(TMDB_POSTER_PATH));
-            movieInfo.setUserRating(movieInfoJson.getDouble(TMDB_USER_RATING));
-            movieInfo.setReleaseDate(movieInfoJson.getString(TMDB_RELEASE_DATE));
+            basicMovieInfo.setId(movieInfoJson.getInt(TMDB_ID));
+            basicMovieInfo.setOriginalTitle(movieInfoJson.getString(TMDB_ORIGINAL_TITLE));
+            basicMovieInfo.setPlotSynopsis(movieInfoJson.getString(TMDB_PLOT_SYNOPSIS));
+            basicMovieInfo.setPosterUrl("http://image.tmdb.org/t/p/w185"+movieInfoJson.getString(TMDB_POSTER_PATH));
+            basicMovieInfo.setUserRating(movieInfoJson.getDouble(TMDB_USER_RATING));
+            basicMovieInfo.setReleaseDate(movieInfoJson.getString(TMDB_RELEASE_DATE));
 
-            movieInfoArray[i] = movieInfo;
+            basicMovieInfoArray[i] = basicMovieInfo;
         }
 
-        return movieInfoArray;
+        return basicMovieInfoArray;
 
     }
 
@@ -60,23 +60,23 @@ public class TheMovieDBJsonUtils {
     public static String getMovieReviewsInHtmlFromJson(String jsonResponseString) throws JSONException {
 
         final String TMDB_RESULTS = "results";
-        final String TMDB_REIVEWER = "author";
+        final String TMDB_REVIEWER = "author";
         final String TMDB_REVIEW_CONTENT = "content";
 
-        String allReivews = "";
+        String allReviews = "";
 
         JSONArray jsonResultsArray = new JSONObject(jsonResponseString).getJSONArray(TMDB_RESULTS);
 
         for (int i = 0; i < jsonResultsArray.length(); i++) {
             JSONObject jsonReview = (JSONObject) jsonResultsArray.get(i);
-            String reviewer = jsonReview.getString(TMDB_REIVEWER);
+            String reviewer = jsonReview.getString(TMDB_REVIEWER);
             String reviewContent = jsonReview.getString(TMDB_REVIEW_CONTENT);
-            allReivews = allReivews.concat("<br><b>" + reviewer + ":</b><br><br>")
+            allReviews = allReviews.concat("<br><b>" + reviewer + ":</b><br><br>")
                     .concat(reviewContent)
                     .concat("<br><br><b>======================================</b><br>");
         }
 
-        return allReivews.replace("\r\n", "<br>");
+        return allReviews.replace("\r\n", "<br>");
     }
 
     /**
