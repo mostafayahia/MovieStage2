@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ProgressBar mLoadingIndicator;
     private TextView mErrorNoConnectionTv;
 
+    /*
+     * we use this variable to detect if the current display in this activity is favourites or not
+     */
     private boolean mFavouritesDisplay;
 
     @Override
@@ -89,8 +92,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         super.onStart();
 
+        /*
+         * it is useful to reload movies from favourites database in case of the user unfavourites
+         * the movie from the detail activity then return back to this activity while favourites
+         * is currently displayed
+         */
         if (mFavouritesDisplay)
-            loadFavouriteMoviesDataFromDb();
+            loadFavouriteMoviesDataFromFavouritesDb();
     }
 
     @Override
@@ -107,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 loadMoviesData(NetworkUtils.SORT_TOP_RATED);
                 return true;
             case R.id.action_favourites:
-                loadFavouriteMoviesDataFromDb();
+                loadFavouriteMoviesDataFromFavouritesDb();
                 mFavouritesDisplay = true;
                 return true;
             default:
@@ -115,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
     }
 
-    private void loadFavouriteMoviesDataFromDb() {
+    private void loadFavouriteMoviesDataFromFavouritesDb() {
 
         hideErrorNoConnectionView();
 

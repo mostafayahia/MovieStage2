@@ -3,4 +3,11 @@
     <dimen name="detail_activity_padding">16dp</dimen>
     <dimen name="detail_ic_favourite_size">48dp</dimen>
     <dimen name="detail_space_between_poster_and_movie_info">64dp</dimen>
+    <dimen name="detail_poster_margin_start">24dp</dimen>
+    <dimen name="detail_poster_width">185dp</dimen>
+    <dimen name="detail_poster_height">277dp</dimen>
+    <dimen name="detail_movie_title_padding">32dp</dimen>
+    <dimen name="detail_vertical_margin_between_views">16dp</dimen>
+    <dimen name="detail_horizontal_rule_height">1dp</dimen>
+    <dimen name="detail_margin_small">8dp</dimen>
 </resources>

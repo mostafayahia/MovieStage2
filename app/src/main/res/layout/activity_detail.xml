@@ -1,164 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/detail_activity_padding"
-        tools:context="tutorial.elmasry.moviestage2.DetailActivity">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/detail_title"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="32dp"
-            android:textColor="@android:color/primary_text_dark"
-            android:background="@color/detail_movie_title_bg"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Movie Title" />
+            android:paddingBottom="@dimen/detail_activity_padding"
+            tools:context="tutorial.elmasry.moviestage2.DetailActivity">
 
-        <ImageView
-            android:id="@+id/detail_iv_poster"
-            android:layout_width="185dp"
-            android:layout_height="277dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/content_description_poster"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_title"
-            tools:src="@mipmap/ic_launcher"
-            tools:background="#ffff00"
-            />
+            <TextView
+                android:id="@+id/detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/detail_movie_title_bg"
+                android:padding="@dimen/detail_movie_title_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@android:color/primary_text_dark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Movie Title" />
 
-        <TextView
-            android:id="@+id/detail_release_date"
-            style="@style/MovieInfoStyle"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:layout_marginStart="@dimen/detail_space_between_poster_and_movie_info"
-            android:layout_marginLeft="@dimen/detail_space_between_poster_and_movie_info"
-            app:layout_constraintStart_toEndOf="@+id/detail_iv_poster"
-            app:layout_constraintTop_toTopOf="@+id/detail_iv_poster"
-            tools:text="2001" />
+            <ImageView
+                android:id="@+id/detail_iv_poster"
+                android:layout_width="@dimen/detail_poster_width"
+                android:layout_height="@dimen/detail_poster_height"
+                android:layout_marginLeft="@dimen/detail_poster_margin_start"
+                android:layout_marginStart="@dimen/detail_poster_margin_start"
+                android:layout_marginTop="@dimen/detail_margin_small"
+                android:contentDescription="@string/content_description_poster"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_title"
+                tools:background="#ffff00"
+                tools:src="@mipmap/ic_launcher" />
 
-        <TextView
-            android:id="@+id/detail_running_time"
-            style="@style/MovieInfoStyle"
-            android:textStyle="italic"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            app:layout_constraintStart_toStartOf="@+id/detail_release_date"
-            app:layout_constraintTop_toBottomOf="@+id/detail_release_date"
-            tools:text="99min" />
+            <TextView
+                android:id="@+id/detail_release_date"
+                style="@style/MovieInfoStyle"
+                android:layout_marginLeft="@dimen/detail_space_between_poster_and_movie_info"
+                android:layout_marginStart="@dimen/detail_space_between_poster_and_movie_info"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                app:layout_constraintStart_toEndOf="@+id/detail_iv_poster"
+                app:layout_constraintTop_toTopOf="@+id/detail_iv_poster"
+                tools:text="2001" />
 
-        <TextView
-            android:id="@+id/detail_user_rating"
-            style="@style/MovieInfoStyle"
-            app:layout_constraintStart_toStartOf="@+id/detail_running_time"
-            app:layout_constraintTop_toBottomOf="@+id/detail_running_time"
-            android:textColor="@android:color/black"
-            tools:text="5.7/10" />
+            <TextView
+                android:id="@+id/detail_running_time"
+                style="@style/MovieInfoStyle"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textStyle="italic"
+                app:layout_constraintStart_toStartOf="@+id/detail_release_date"
+                app:layout_constraintTop_toBottomOf="@+id/detail_release_date"
+                tools:text="99min" />
 
-        <ImageView
-            android:id="@+id/detail_ic_favourite"
-            android:layout_width="@dimen/detail_ic_favourite_size"
-            android:layout_height="@dimen/detail_ic_favourite_size"
-            android:layout_marginTop="16dp"
-            android:onClick="handleFavouriteButtonClick"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="@+id/detail_user_rating"
-            app:layout_constraintTop_toBottomOf="@+id/detail_user_rating"
-            android:contentDescription="@string/content_description_favourite_ic"
-            app:srcCompat="@drawable/ic_movie_not_in_favourites" />
+            <TextView
+                android:id="@+id/detail_user_rating"
+                style="@style/MovieInfoStyle"
+                android:textColor="@android:color/black"
+                app:layout_constraintStart_toStartOf="@+id/detail_running_time"
+                app:layout_constraintTop_toBottomOf="@+id/detail_running_time"
+                tools:text="5.7/10" />
 
-        <TextView
-            android:id="@+id/detail_plot_synopsis"
-            style="@style/MovieInfoStyle"
-            android:layout_marginTop="16dp"
-            android:padding="@dimen/detail_activity_padding"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_iv_poster"
-            tools:text="Overview about the movie" />
+            <ImageView
+                android:id="@+id/detail_ic_favourite"
+                android:layout_width="@dimen/detail_ic_favourite_size"
+                android:layout_height="@dimen/detail_ic_favourite_size"
+                android:layout_marginTop="@dimen/detail_vertical_margin_between_views"
+                android:contentDescription="@string/content_description_favourite_ic"
+                android:onClick="handleFavouriteButtonClick"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/detail_user_rating"
+                app:layout_constraintTop_toBottomOf="@+id/detail_user_rating"
+                app:srcCompat="@drawable/ic_movie_not_in_favourites" />
 
-        <View
-            android:id="@+id/detail_horizontal_rule_after_synopsis"
-            style="@style/horizontalRuleStyle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_plot_synopsis" />
+            <TextView
+                android:id="@+id/detail_plot_synopsis"
+                style="@style/MovieInfoStyle"
+                android:layout_marginTop="@dimen/detail_vertical_margin_between_views"
+                android:padding="@dimen/detail_activity_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_iv_poster"
+                tools:text="Overview about the movie" />
 
-        <TextView
-            android:id="@+id/detail_label_trailers"
-            style="@style/MovieInfoStyle"
-            android:paddingStart="@dimen/detail_activity_padding"
-            android:paddingLeft="@dimen/detail_activity_padding"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text="@string/detail_label_trailers"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_horizontal_rule_after_synopsis" />
+            <View
+                android:id="@+id/detail_horizontal_rule_after_synopsis"
+                style="@style/horizontalRuleStyle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_plot_synopsis" />
 
-        <Button
-            android:id="@+id/detail_button_trailer1"
-            style="@style/trailerButtonStyle"
-            android:text="@string/detail_label_trailer1"
-            android:visibility="gone"
-            android:onClick="handleTrailerButtonClick"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_label_trailers" />
+            <TextView
+                android:id="@+id/detail_label_trailers"
+                style="@style/MovieInfoStyle"
+                android:paddingLeft="@dimen/detail_activity_padding"
+                android:paddingStart="@dimen/detail_activity_padding"
+                android:text="@string/detail_label_trailers"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_horizontal_rule_after_synopsis" />
 
-        <View
-            android:id="@+id/detail_horizontal_rule_after_trailer1"
-            style="@style/horizontalRuleStyle"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer1" />
+            <Button
+                android:id="@+id/detail_button_trailer1"
+                style="@style/trailerButtonStyle"
+                android:onClick="handleTrailerButtonClick"
+                android:text="@string/detail_label_trailer1"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_label_trailers" />
 
-        <Button
-            android:id="@+id/detail_button_trailer2"
-            style="@style/trailerButtonStyle"
-            android:text="@string/detail_label_trailer2"
-            android:visibility="gone"
-            android:onClick="handleTrailerButtonClick"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer1" />
+            <View
+                android:id="@+id/detail_horizontal_rule_after_trailer1"
+                style="@style/horizontalRuleStyle"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer1" />
 
-        <View
-            android:id="@+id/detail_horizontal_rule_after_trailer2"
-            style="@style/horizontalRuleStyle"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer2" />
+            <Button
+                android:id="@+id/detail_button_trailer2"
+                style="@style/trailerButtonStyle"
+                android:onClick="handleTrailerButtonClick"
+                android:text="@string/detail_label_trailer2"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer1" />
 
-        <TextView
-            android:id="@+id/detail_label_reviews"
-            style="@style/MovieInfoStyle"
-            android:layout_marginStart="@dimen/detail_activity_padding"
-            android:layout_marginLeft="@dimen/detail_activity_padding"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text="@string/detail_label_reviews"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer2" />
+            <View
+                android:id="@+id/detail_horizontal_rule_after_trailer2"
+                style="@style/horizontalRuleStyle"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer2" />
 
-        <TextView
-            android:id="@+id/detail_reviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/detail_activity_padding"
-            android:paddingLeft="@dimen/detail_activity_padding"
-            android:paddingEnd="@dimen/detail_activity_padding"
-            android:paddingRight="@dimen/detail_activity_padding"
-            android:layout_marginTop="8dp"
-            tools:text="Some reviewsInHtml here..."
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_label_reviews" />
+            <TextView
+                android:id="@+id/detail_label_reviews"
+                style="@style/MovieInfoStyle"
+                android:layout_marginLeft="@dimen/detail_activity_padding"
+                android:layout_marginStart="@dimen/detail_activity_padding"
+                android:text="@string/detail_label_reviews"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_button_trailer2" />
 
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/detail_reviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_margin_small"
+                android:paddingEnd="@dimen/detail_activity_padding"
+                android:paddingLeft="@dimen/detail_activity_padding"
+                android:paddingRight="@dimen/detail_activity_padding"
+                android:paddingStart="@dimen/detail_activity_padding"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_label_reviews"
+                tools:text="Some reviewsInHtml here..." />
 
-</ScrollView>
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+</layout>
